@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Messages Inbox | Bharat's Portfolio Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+  <style>
+    :root {
+      --bg-dark: #070a12;
+      --bg-main: #0b0f19;
+      --bg-card: rgba(17, 24, 39, 0.75);
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --border-accent: rgba(99, 102, 241, 0.35);
+      --accent-primary: #6366f1;
+      --accent-secondary: #06b6d4;
+      --accent-emerald: #10b981;
+      --accent-rose: #f43f5e;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --gradient-brand: linear-gradient(135deg, #6366f1 0%, #06b6d4 100%);
+      --font-sans: 'Plus Jakarta Sans', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      font-family: var(--font-sans);
+      min-height: 100vh;
+      padding: 40px 20px;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 35px;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 1.3rem;
+      font-weight: 800;
+    }
+
+    .brand-badge {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: var(--gradient-brand);
+      display: grid;
+      place-items: center;
+      color: #fff;
+      font-family: var(--font-mono);
+      font-weight: 800;
+    }
+
+    .actions {
+      display: flex;
+      gap: 12px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 18px;
+      border-radius: 9999px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      border: 1px solid var(--border-subtle);
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text-main);
+    }
+    .btn:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+    .btn-primary {
+      background: var(--gradient-brand);
+      color: #fff;
+      border: none;
+    }
+
+    /* Stats Overview */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+      margin-bottom: 30px;
+    }
+
+    .stat-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 14px;
+      padding: 20px 24px;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .stat-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      background: rgba(99, 102, 241, 0.15);
+      color: var(--accent-secondary);
+      display: grid;
+      place-items: center;
+      font-size: 1.3rem;
+    }
+
+    .stat-label {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .stat-val {
+      font-size: 1.6rem;
+      font-weight: 800;
+      font-family: var(--font-mono);
+      margin-top: 2px;
+    }
+
+    /* Message Cards */
+    .panel {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 18px;
+      padding: 26px;
+    }
+
+    .panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 22px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .panel-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .messages-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .message-card {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.2s ease;
+    }
+    .message-card:hover {
+      border-color: var(--border-accent);
+      background: rgba(255, 255, 255, 0.035);
+    }
+
+    .msg-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .msg-author {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .msg-email {
+      font-size: 0.85rem;
+      color: var(--accent-secondary);
+      font-family: var(--font-mono);
+      margin-left: 10px;
+      text-decoration: underline;
+    }
+
+    .msg-date {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      font-family: var(--font-mono);
+    }
+
+    .msg-subject {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 6px;
+      background: rgba(99, 102, 241, 0.12);
+      border: 1px solid rgba(99, 102, 241, 0.25);
+      color: #a5b4fc;
+      font-size: 0.8rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+    .msg-body {
+      font-size: 0.95rem;
+      line-height: 1.65;
+      color: var(--text-main);
+      white-space: pre-wrap;
+      background: rgba(0, 0, 0, 0.2);
+      padding: 14px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
+    .msg-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .btn-delete {
+      color: var(--accent-rose);
+      background: rgba(244, 63, 94, 0.1);
+      border: 1px solid rgba(244, 63, 94, 0.25);
+      padding: 6px 12px;
+      font-size: 0.78rem;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .btn-delete:hover {
+      background: rgba(244, 63, 94, 0.2);
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--text-muted);
+    }
+    .empty-icon {
+      font-size: 3rem;
+      color: var(--accent-primary);
+      opacity: 0.4;
+      margin-bottom: 16px;
+    }
+
+    @media (max-width: 768px) {
+      .stats-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="brand">
+        <div class="brand-badge">B</div>
+        <div>
+          <span>Bharat's Inbox</span>
+          <small style="display:block; font-size:0.75rem; color:var(--text-muted); font-family:var(--font-mono);">SQLite DB Live Dashboard</small>
+        </div>
+      </div>
+      <div class="actions">
+        <button class="btn" id="refreshBtn" onclick="loadMessages()">
+          <i class="fa-solid fa-rotate-right"></i> Refresh
+        </button>
+        <a href="/" class="btn btn-primary">
+          <i class="fa-solid fa-arrow-left"></i> View Portfolio
+        </a>
+      </div>
+    </header>
+
+    <!-- Stats -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon"><i class="fa-solid fa-inbox"></i></div>
+        <div>
+          <div class="stat-label">Total Submissions</div>
+          <div class="stat-val" id="totalCount">0</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon"><i class="fa-solid fa-database"></i></div>
+        <div>
+          <div class="stat-label">Database Engine</div>
+          <div class="stat-val" style="font-size: 1.15rem; color: var(--accent-emerald);">SQLite3 (Active)</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon"><i class="fa-solid fa-clock"></i></div>
+        <div>
+          <div class="stat-label">Last Checked</div>
+          <div class="stat-val" id="lastChecked" style="font-size: 1.05rem;">--:--:--</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Messages Container -->
+    <div class="panel">
+      <div class="panel-header">
+        <h2 class="panel-title">
+          <i class="fa-solid fa-envelope-open-text" style="color:var(--accent-secondary)"></i>
+          <span>Received Inquiries</span>
+        </h2>
+        <span id="msgCountBadge" style="font-family:var(--font-mono); font-size:0.85rem; color:var(--text-muted);">Loading...</span>
+      </div>
+
+      <div class="messages-list" id="messagesList">
+        <div class="empty-state">
+          <div class="empty-icon"><i class="fa-solid fa-spinner fa-spin"></i></div>
+          <p>Connecting to backend SQLite database...</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const apiBase = (window.location.protocol.startsWith('http')) ? '' : 'http://localhost:8000';
+
+    async function loadMessages() {
+      const listEl = document.getElementById('messagesList');
+      const countEl = document.getElementById('totalCount');
+      const badgeEl = document.getElementById('msgCountBadge');
+      const timeEl = document.getElementById('lastChecked');
+
+      try {
+        const res = await fetch(`${apiBase}/api/messages`, { cache: 'no-store' });
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        const data = await res.json();
+        const messages = data.messages || [];
+
+        countEl.textContent = messages.length;
+        badgeEl.textContent = `${messages.length} message${messages.length === 1 ? '' : 's'}`;
+        timeEl.textContent = new Date().toLocaleTimeString();
+
+        if (messages.length === 0) {
+          listEl.innerHTML = `
+            <div class="empty-state">
+              <div class="empty-icon"><i class="fa-solid fa-inbox"></i></div>
+              <p style="font-size:1.1rem; color:#fff; margin-bottom:6px;">No messages received yet.</p>
+              <p style="font-size:0.85rem;">Submit a message from the website contact form to test the SQLite database connection.</p>
+            </div>
+          `;
+          return;
+        }
+
+        listEl.innerHTML = messages.map(msg => `
+          <div class="message-card" id="msg-${msg.id}">
+            <div class="msg-top">
+              <div>
+                <span class="msg-author">${escapeHtml(msg.name)}</span>
+                <a href="mailto:${escapeHtml(msg.email)}" class="msg-email">${escapeHtml(msg.email)}</a>
+              </div>
+              <span class="msg-date"><i class="fa-regular fa-clock"></i> ${escapeHtml(msg.created_at || '')}</span>
+            </div>
+            <div class="msg-subject">${escapeHtml(msg.subject || 'General Inquiry')}</div>
+            <div class="msg-body">${escapeHtml(msg.message)}</div>
+            <div class="msg-actions">
+              <button class="btn-delete" onclick="deleteMsg(${msg.id})">
+                <i class="fa-solid fa-trash"></i> Delete
+              </button>
+            </div>
+          </div>
+        `).join('');
+
+      } catch (err) {
+        listEl.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-icon" style="color:var(--accent-rose)"><i class="fa-solid fa-triangle-exclamation"></i></div>
+            <p style="color:var(--accent-rose); font-weight:600;">Unable to connect to backend server.</p>
+            <p style="font-size:0.85rem; margin-top:6px;">Make sure the server is running by executing: <code>python3 server.py</code></p>
+          </div>
+        `;
+      }
+    }
+
+    async function deleteMsg(id) {
+      if (!confirm(`Delete message #${id}?`)) return;
+      try {
+        const res = await fetch(`${apiBase}/api/delete-message`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id })
+        });
+        if (res.ok) {
+          const card = document.getElementById(`msg-${id}`);
+          if (card) card.remove();
+          loadMessages();
+        } else {
+          alert('Failed to delete message.');
+        }
+      } catch (e) {
+        alert('Network error while deleting.');
+      }
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    // Initial load
+    loadMessages();
+  </script>
+</body>
+</html>
